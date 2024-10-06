@@ -5,7 +5,7 @@ on:
     branches: [ "jq-comm-title-comment" ]
     paths:
       - 'src/mangaplus/manga_id_map.json'
-    types: [synchronize]
+    types: [opened, synchronize]
 
 jobs:
   diff:
