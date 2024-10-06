@@ -18,7 +18,7 @@ jobs:
         run: |
           git fetch origin pull/${{ github.event.number }}/head:BRANCH_NAME
           git -P show BRANCH_NAME:src/mangaplus/manga_id_map.json >new
-          git -P show ${{ github.event.pull_request.base.ref }}:src/mangaplus/manga_id_map.json >current
+          git -P show origin/main:src/mangaplus/manga_id_map.json >current
       - name: jq to plus
         run: |
           jq -r '.[].[]' new | sort -o new.mangaplus
