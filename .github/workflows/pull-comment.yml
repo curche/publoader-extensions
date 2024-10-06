@@ -1,4 +1,4 @@
-name: "Comment New Titles to PR"
+name: "Comment New Titles to PR ${{ github.event.number }}"
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Show files
         run: |
-          git -P show ${{ github.event.pull_request.head.ref }}:src/mangaplus/manga_id_map.json >new
+          git -P show ${{ github.ref }}:src/mangaplus/manga_id_map.json >new
           git -P show ${{ github.event.pull_request.base.ref }}:src/mangaplus/manga_id_map.json >current
       - name: jq to plus
         run: |
