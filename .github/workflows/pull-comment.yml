@@ -1,4 +1,4 @@
-name: "Comment New Titles to PR ${{ github.event.number }}"
+name: "Comment New Titles to PR"
 
 on:
   pull_request:
