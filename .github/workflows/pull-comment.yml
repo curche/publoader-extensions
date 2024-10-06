@@ -1,0 +1,63 @@
+name: "Comment New Titles to PR"
+
+on:
+  pull_request:
+    branches: [ "jq-comm-title-comment" ]
+    paths:
+      - 'src/mangaplus/manga_id_map.json'
+
+jobs:
+  diff:
+    name: Extract {UU,}IDs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Show files
+        run: |
+          git -P show ${{ github.event.pull_request.head.ref }}:src/mangaplus/manga_id_map.json >new
+          git -P show ${{ github.event.pull_request.base.ref }}:src/mangaplus/manga_id_map.json >current
+      - name: jq to plus
+        run: |
+          jq -r '.[].[]' new | sort -o new.mangaplus
+          jq -r '.[].[]' current | sort -o current.mangaplus
+      - name: jq to dex
+        run: |
+          jq -r '. | keys[]' new | sort >new.mangadex
+          jq -r '. | keys[]' current | sort >current.mangadex
+      - name: comm
+        run: |
+          comm -13 current.mangadex new.mangadex | jq -R -s -c 'split("\n")[:-1]' >>mangadex.comm
+          comm -13 current.mangaplus new.mangaplus | jq -R -s -c 'split("\n")[:-1]'>>mangaplus.comm
+      - id: result
+        run: |
+          echo "dex_comm=$(cat mangadex.comm)" >> $GITHUB_OUTPUT
+          echo "plus_comm=$(cat mangaplus.comm)" >> $GITHUB_OUTPUT
+
+    outputs:
+      dex: ${{ steps.result.outputs.dex_comm }}
+      plus: ${{ steps.result.outputs.dex_comm }}
+
+  comment-on-pr:
+    name: Comment to PR
+    runs-on: ubuntu-latest
+    needs: [diff]
+    steps:
+      - name: Create file
+        run: |
+          dex_comm=${{ fromJson(needs.diff.outputs.dex) }}
+          plus_comm=${{ fromJson(needs.diff.outputs.plus) }}
+          echo "New Dex UUID(s): " >> pr.comment
+          for uuid in ${dex_comm}; do
+            echo "[${uuid}](https://mangadex.org/title/${uuid}) " >> pr.comment
+          done
+          echo "\n" >> pr.comment
+          echo "New M+ ID(s): ${plus_comm}\n" >> pr.comment
+          for mpid in ${plus_comm}; do
+            echo "[$mpid](https://mangaplus.shueisha.co.jp/titles/${mpid}) " >> pr.comment
+          done
+        
+      - name: PR comment with file
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: pr.comment
