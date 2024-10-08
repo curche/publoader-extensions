@@ -26,12 +26,12 @@ jobs:
         run: |
           set -x
           cat new | jq --raw-output $(echo '.[].[]') | sort -o new.mangaplus
-          cat current | jq --raw-output $(echo '.[].[]') | sort -o tee current.mangaplus
+          cat current | jq --raw-output $(echo '.[].[]') | sort -o current.mangaplus
       - name: jq to dex
         run: |
           what=". | keys[]"
-          cat new | jq --raw-output "$what" | sort -o tee new.mangadex
-          cat current | jq --raw-output "$what" | sort -o tee current.mangadex
+          cat new | jq --raw-output "$what" | sort -o new.mangadex
+          cat current | jq --raw-output "$what" | sort -o current.mangadex
       - name: comm
         run: |
           comm -13 current.mangadex new.mangadex | tee mangadex.comm
