@@ -32,8 +32,8 @@ jobs:
           jq -r ''. | keys[]'' current | sort -o current.mangadex
       - name: comm
         run: |
-          comm -13 current.mangadex new.mangadex | jq -R -s -c ''split("\n")[:-1]'' | tee mangadex.comm
-          comm -13 current.mangaplus new.mangaplus | jq -R -s -c ''split("\n")[:-1]'' | tee mangaplus.comm
+          comm -13 current.mangadex new.mangadex | jq -R -s -c 'split("\n")[:-1]' | tee mangadex.comm
+          comm -13 current.mangaplus new.mangaplus | jq -R -s -c 'split("\n")[:-1]' | tee mangaplus.comm
       - id: result
         run: |
           echo "dex_comm=$(cat mangadex.comm)" >> $GITHUB_OUTPUT
