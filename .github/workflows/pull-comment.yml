@@ -25,13 +25,13 @@ jobs:
       - name: jq to plus
         run: |
           who='.[].[]'
-          jq $who new | sort | tee new.mangaplus
-          jq $who current | sort | tee current.mangaplus
+          cat new | jq --raw-output $who | sort | tee new.mangaplus
+          cat current | jq --raw-output $who | sort | tee current.mangaplus
       - name: jq to dex
         run: |
           what=". | keys[]"
-          jq "$what" new | sort -o new.mangadex
-          jq "$what" current | sort -o current.mangadex
+          cat new | jq "$what" | sort | tee new.mangadex
+          cat current | jq "$what" | sort | tee current.mangadex
       - name: comm
         run: |
           comm -13 current.mangadex new.mangadex | jq -R -s -c 'split("\n")[:-1]' | tee mangadex.comm
