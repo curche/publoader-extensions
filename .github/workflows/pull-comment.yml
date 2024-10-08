@@ -14,10 +14,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      - name: Show files
+      - name: Fetch branches
         run: |
           git fetch origin pull/${{ github.event.number }}/head:NEW_BRANCH
           git fetch origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}:CURRENT_BRANCH
+      - name: Git Show
+        run: |
           git -P show NEW_BRANCH:src/mangaplus/manga_id_map.json >new
           git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json >current
       - name: jq to plus
