@@ -24,9 +24,8 @@ jobs:
           git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json | tee current
       - name: jq to plus
         run: |
-          who="\.\[\]\.\[\]"
-          cat new | jq --raw-output "$who" | sort | tee new.mangaplus
-          cat current | jq --raw-output "$who" | sort | tee current.mangaplus
+          cat new | jq --raw-output '.[].[]' | sort | tee new.mangaplus
+          cat current | jq --raw-output '.[].[]' | sort | tee current.mangaplus
       - name: jq to dex
         run: |
           what=". | keys[]"
