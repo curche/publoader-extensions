@@ -24,12 +24,12 @@ jobs:
           git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json | tee current
       - name: jq to plus
         run: |
-          jq -r '.[].[]' new | sort -o tee new.mangaplus
-          jq -r '.[].[]' current | sort -o tee current.mangaplus
+          jq -r ".[].[]" new | sort -o tee new.mangaplus
+          jq -r ".[].[]" current | sort -o tee current.mangaplus
       - name: jq to dex
         run: |
-          jq -r '. | keys[]' new | sort -o tee new.mangadex
-          jq -r '. | keys[]' current | sort -o tee current.mangadex
+          jq -r ". | keys[]" new | sort -o tee new.mangadex
+          jq -r ". | keys[]" current | sort -o tee current.mangadex
       - name: comm
         run: |
           comm -13 current.mangadex new.mangadex | jq -R -s -c 'split("\n")[:-1]' | tee mangadex.comm
