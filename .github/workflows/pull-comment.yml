@@ -20,20 +20,20 @@ jobs:
           git fetch origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}:CURRENT_BRANCH
       - name: Git Show
         run: |
-          git -P show NEW_BRANCH:src/mangaplus/manga_id_map.json >new
-          git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json >current
+          git -P show NEW_BRANCH:src/mangaplus/manga_id_map.json | tee new
+          git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json | tee current
       - name: jq to plus
         run: |
-          jq -r '.[].[]' new | sort -o new.mangaplus
-          jq -r '.[].[]' current | sort -o current.mangaplus
+          jq -r '.[].[]' new | sort | tee new.mangaplus
+          jq -r '.[].[]' current | sort | tee current.mangaplus
       - name: jq to dex
         run: |
-          jq -r '. | keys[]' new | sort >new.mangadex
-          jq -r '. | keys[]' current | sort >current.mangadex
+          jq -r '. | keys[]' new | sort | tee new.mangadex
+          jq -r '. | keys[]' current | sort | tee current.mangadex
       - name: comm
         run: |
-          comm -13 current.mangadex new.mangadex | jq -R -s -c 'split("\n")[:-1]' >>mangadex.comm
-          comm -13 current.mangaplus new.mangaplus | jq -R -s -c 'split("\n")[:-1]'>>mangaplus.comm
+          comm -13 current.mangadex new.mangadex | jq -R -s -c 'split("\n")[:-1]' | tee mangadex.comm
+          comm -13 current.mangaplus new.mangaplus | jq -R -s -c 'split("\n")[:-1]' | tee mangaplus.comm
       - id: result
         run: |
           echo "dex_comm=$(cat mangadex.comm)" >> $GITHUB_OUTPUT
@@ -52,14 +52,14 @@ jobs:
         run: |
           dex_comm=${{ fromJson(needs.diff.outputs.dex) }}
           plus_comm=${{ fromJson(needs.diff.outputs.plus) }}
-          echo "New Dex UUID(s): " >> pr.comment
+          echo "New Dex UUID(s): " | tee pr.comment
           for uuid in ${dex_comm}; do
-            echo "[${uuid}](https://mangadex.org/title/${uuid}) " >> pr.comment
+            echo "[${uuid}](https://mangadex.org/title/${uuid}) " | tee -a pr.comment
           done
-          echo "\n" >> pr.comment
-          echo "New M+ ID(s): ${plus_comm}\n" >> pr.comment
+          echo "\n" | tee -a pr.comment
+          echo "New M+ ID(s): ${plus_comm}\n" | tee -a pr.comment
           for mpid in ${plus_comm}; do
-            echo "[$mpid](https://mangaplus.shueisha.co.jp/titles/${mpid}) " >> pr.comment
+            echo "[$mpid](https://mangaplus.shueisha.co.jp/titles/${mpid}) " | tee -a pr.comment
           done
         
       - name: PR comment with file
