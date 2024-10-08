@@ -30,8 +30,8 @@ jobs:
       - name: jq to dex
         run: |
           what=". | keys[]"
-          cat new | jq "$what" | sort | tee new.mangadex
-          cat current | jq "$what" | sort | tee current.mangadex
+          cat new | jq --raw-output "$what" | sort | tee new.mangadex
+          cat current | jq --raw-output "$what" | sort | tee current.mangadex
       - name: comm
         run: |
           comm -13 current.mangadex new.mangadex | tee mangadex.comm
