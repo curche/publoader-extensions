@@ -16,9 +16,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Show files
         run: |
-          git fetch origin pull/${{ github.event.number }}/head:BRANCH_NAME
-          git -P show BRANCH_NAME:src/mangaplus/manga_id_map.json >new
-          git -P show refs/heads/main:src/mangaplus/manga_id_map.json >current
+          git fetch origin pull/${{ github.event.number }}/head:NEW_BRANCH
+          git fetch origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}:CURRENT_BRANCH
+          git -P show NEW_BRANCH:src/mangaplus/manga_id_map.json >new
+          git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json >current
       - name: jq to plus
         run: |
           jq -r '.[].[]' new | sort -o new.mangaplus
