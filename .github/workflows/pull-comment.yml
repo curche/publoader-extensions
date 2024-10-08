@@ -20,13 +20,13 @@ jobs:
           git fetch origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}:CURRENT_BRANCH
       - name: Git Show
         run: |
-          git -P show NEW_BRANCH:src/mangaplus/manga_id_map.json | tee new
-          git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json | tee current
+          git -P show NEW_BRANCH:src/mangaplus/manga_id_map.json >new
+          git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json >current
       - name: jq to plus
         run: |
           who='.[].[]'
-          jq -r $who new | tee | sort -o new.mangaplus
-          jq -r $who current | sort -o current.mangaplus
+          jq -r $who new | sort | tee new.mangaplus
+          jq -r $who current | sort | tee current.mangaplus
       - name: jq to dex
         run: |
           what='. | keys[]'
