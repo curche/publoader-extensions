@@ -25,8 +25,8 @@ jobs:
       - name: jq to plus
         run: |
           set -x
-          cat new | jq --raw-output $(echo '.[].[]') | sort -o new.mangaplus
-          cat current | jq --raw-output $(echo '.[].[]') | sort -o current.mangaplus
+          cat new | jq --raw-output $(echo "'.[].[]'") | sort -o new.mangaplus
+          cat current | jq --raw-output $(echo "'.[].[]'") | sort -o current.mangaplus
       - name: jq to dex
         run: |
           what=". | keys[]"
