@@ -37,8 +37,16 @@ jobs:
           comm -13 current.mangaplus new.mangaplus | tee mangaplus.comm
       - id: result
         run: |
-          echo "dex_comm=$(cat mangadex.comm)" >> $GITHUB_OUTPUT
-          echo "plus_comm=$(cat mangaplus.comm)" >> $GITHUB_OUTPUT
+          {
+            echo 'dex_comm<<EOF'
+            cat mangadex.comm
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo 'plus_comm<<EOF'
+            cat mangaplus.comm
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
 
     outputs:
       dex: ${{ steps.result.outputs.dex_comm }}
