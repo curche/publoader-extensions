@@ -64,13 +64,13 @@ jobs:
           {
             echo 'PR_COMMENT_OUTPUT<<EOF'
             echo "New Dex UUID(s): "
-            for uuid in ${dex_comm}; do
-              echo "[${uuid}](https://mangadex.org/title/${uuid}) "
+            for uuid in $dex_comm; do
+              echo "[$uuid](https://mangadex.org/title/$uuid) "
             done
-            echo "\n"
-            echo "New M+ ID(s): ${plus_comm}\n"
-            for mpid in ${plus_comm}; do
-              echo "[$mpid](https://mangaplus.shueisha.co.jp/titles/${mpid}) "
+            echo ""
+            echo "New M+ ID(s): \n"
+            for mpid in $plus_comm; do
+              echo "[$mpid](https://mangaplus.shueisha.co.jp/titles/$mpid) "
             done
             echo EOF
           } >> "$GITHUB_ENV"
