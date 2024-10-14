@@ -24,14 +24,14 @@ jobs:
           git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json >current
       - name: jq to plus
         run: |
-          jq -r $(echo '.[].[]') new | sort | tee new.mangaplus
-          jq -r $(echo '.[].[]') current | sort | tee current.mangaplus
+          jq -r $(echo '.[].[]') new | sort -o new.mangaplus
+          jq -r $(echo '.[].[]') current | sort -o current.mangaplus
       - name: jq to dex
         run: |
           what=". | keys[]"
-          cat new | jq --raw-output "$what" | sort | tee new.mangadex
-          cat current | jq --raw-output "$what" | sort | tee current.mangadex
-      - name: debug
+          cat new | jq --raw-output "$what" | sort -o new.mangadex
+          cat current | jq --raw-output "$what" | sort -o current.mangadex
+      - name: comm
         run: |
           comm -13 current.mangadex new.mangadex | tee mangadex.comm
           comm -13 current.mangaplus new.mangaplus | tee mangaplus.comm
