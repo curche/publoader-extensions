@@ -31,8 +31,9 @@ jobs:
           what=". | keys[]"
           cat new | jq --raw-output "$what" | sort | tee new.mangadex
           cat current | jq --raw-output "$what" | sort | tee current.mangadex
-      - name: comm
+      - name: debug
         run: |
+          cat {new,current}.manga{dex,plus}
           diff new.mangadex current.mangadex | grep '<' | cut -c3- | tee mangadex.comm
           diff new.mangaplus current.mangaplus | grep '<' | cut -c3- | tee mangaplus.comm
       - id: result
