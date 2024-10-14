@@ -61,17 +61,21 @@ jobs:
         run: |
           dex_comm=${{ fromJson(needs.diff.outputs.dex) }}
           plus_comm=${{ fromJson(needs.diff.outputs.plus) }}
-          echo "New Dex UUID(s): " | tee pr.comment
-          for uuid in ${dex_comm}; do
-            echo "[${uuid}](https://mangadex.org/title/${uuid}) " | tee -a pr.comment
-          done
-          echo "\n" | tee -a pr.comment
-          echo "New M+ ID(s): ${plus_comm}\n" | tee -a pr.comment
-          for mpid in ${plus_comm}; do
-            echo "[$mpid](https://mangaplus.shueisha.co.jp/titles/${mpid}) " | tee -a pr.comment
-          done
-        
+          {
+            echo 'PR_COMMENT_OUTPUT<<EOF'
+            echo "New Dex UUID(s): "
+            for uuid in ${dex_comm}; do
+              echo "[${uuid}](https://mangadex.org/title/${uuid}) "
+            done
+            echo "\n"
+            echo "New M+ ID(s): ${plus_comm}\n"
+            for mpid in ${plus_comm}; do
+              echo "[$mpid](https://mangaplus.shueisha.co.jp/titles/${mpid}) "
+            done
+            echo EOF
+          } >> "$GITHUB_ENV"
+          echo $PR_COMMENT_OUTPUT
       - name: PR comment with file
         uses: thollander/actions-comment-pull-request@v2
         with:
-          filePath: pr.comment
+          message: ${{ env.PR_COMMENT_OUTPUT }}
