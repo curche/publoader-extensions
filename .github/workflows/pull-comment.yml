@@ -59,8 +59,8 @@ jobs:
     steps:
       - name: Create file
         run: |
-          dex_comm=${{ fromJson(needs.diff.outputs.dex) }}
-          plus_comm=${{ fromJson(needs.diff.outputs.plus) }}
+          dex_comm=${{ needs.diff.outputs.dex }}
+          plus_comm=${{ needs.diff.outputs.plus }}
           {
             echo 'PR_COMMENT_OUTPUT<<EOF'
             echo "New Dex UUID(s): "
