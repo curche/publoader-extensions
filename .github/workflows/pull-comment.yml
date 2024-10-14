@@ -33,9 +33,8 @@ jobs:
           cat current | jq --raw-output "$what" | sort | tee current.mangadex
       - name: debug
         run: |
-          cat {new,current}.manga{dex,plus}
-          diff new.mangadex current.mangadex | grep '<' | cut -c3- | tee mangadex.comm
-          diff new.mangaplus current.mangaplus | grep '<' | cut -c3- | tee mangaplus.comm
+          diff new.mangadex current.mangadex
+          diff new.mangaplus current.mangaplus
       - id: result
         run: |
           echo "dex_comm=$(cat mangadex.comm)" >> $GITHUB_OUTPUT
