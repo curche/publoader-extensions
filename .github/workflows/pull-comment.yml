@@ -50,7 +50,7 @@ jobs:
 
     outputs:
       dex: ${{ steps.result.outputs.dex_comm }}
-      plus: ${{ steps.result.outputs.dex_comm }}
+      plus: ${{ steps.result.outputs.plus_comm }}
 
   comment-on-pr:
     name: Comment to PR
