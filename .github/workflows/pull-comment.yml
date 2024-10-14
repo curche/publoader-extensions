@@ -59,8 +59,16 @@ jobs:
     steps:
       - name: Create file
         run: |
-          dex_comm=${{ needs.diff.outputs.dex }}
-          plus_comm=${{ needs.diff.outputs.plus }}
+          {
+            echo 'dex_comm<<EOF'
+            ${{ needs.diff.outputs.dex }}
+            echo EOF
+          } >> "$GITHUB_ENV"
+          {
+            echo 'dex_comm<<EOF'
+            ${{ needs.diff.outputs.plus }}
+            echo EOF
+          } >> "$GITHUB_ENV"
           {
             echo 'PR_COMMENT_OUTPUT<<EOF'
             echo "New Dex UUID(s): "
