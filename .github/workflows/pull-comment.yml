@@ -51,8 +51,8 @@ jobs:
     steps:
       - name: Create file
         run: |
-          echo "${{ fromJson(needs.diff.outputs.dex)  }}"
-          echo "${{ fromJson(needs.diff.outputs.plus) }}"
+          jq $(echo '.') ${{ needs.diff.outputs.dex }}
+          jq $(echo '.[]') ${{ needs.diff.outputs.plus }}
       - name: PR comment with file
         uses: thollander/actions-comment-pull-request@v2
         with:
