@@ -65,7 +65,7 @@ jobs:
             echo EOF
           } >> "$GITHUB_ENV"
           {
-            echo 'dex_comm<<EOF'
+            echo 'plus_comm<<EOF'
             echo ${{ needs.diff.outputs.plus }}
             echo EOF
           } >> "$GITHUB_ENV"
