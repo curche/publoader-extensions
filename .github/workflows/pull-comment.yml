@@ -37,16 +37,8 @@ jobs:
           comm -13 current.mangaplus new.mangaplus | tee mangaplus.comm
       - id: result
         run: |
-          {
-            echo 'dex_comm<<EOF'
-            cat mangadex.comm
-            echo EOF
-          } >> "$GITHUB_OUTPUT"
-          {
-            echo 'plus_comm<<EOF'
-            cat mangaplus.comm
-            echo EOF
-          } >> "$GITHUB_OUTPUT"
+          echo "dex_comm=$(cat mangadex.comm | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "plus_comm=$(cat mangaplus.comm | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
     outputs:
       dex: ${{ steps.result.outputs.dex_comm }}
@@ -61,12 +53,12 @@ jobs:
         run: |
           {
             echo 'dex_comm<<EOF'
-            echo ${{ needs.diff.outputs.dex }}
+            echo ${{ fromJson(needs.diff.outputs.dex) }}
             echo EOF
           } >> "$GITHUB_ENV"
           {
             echo 'plus_comm<<EOF'
-            echo ${{ needs.diff.outputs.plus }}
+            echo ${{ fromJson(needs.diff.outputs.plus) }}
             echo EOF
           } >> "$GITHUB_ENV"
           {
