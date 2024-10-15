@@ -51,7 +51,7 @@ jobs:
     steps:
       - name: Create file
         run: |
-          for uuid in ${{ fromJson(needs.diff.outputs.dex }}
+          for uuid in ${{ fromJson(needs.diff.outputs.dex) }}
           do
             echo mangadex.org/title/$uuid
           done
