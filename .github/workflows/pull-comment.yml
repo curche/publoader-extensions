@@ -48,17 +48,14 @@ jobs:
     name: Comment to PR
     runs-on: ubuntu-latest
     needs: [diff]
-    env:
-      dexUUIDs: ${{ fromJson(needs.diff.outputs.dex) }}
-      plusIDs: ${{ fromJson(needs.diff.outputs.plus) }}
     steps:
       - name: Create file
         run: |
-          for uuid in $(echo "${{ env.dexUUIDs }}")
+          for uuid in $(echo "${{ fromJson(needs.diff.outputs.dex) }}")
           do
             echo mangadex.org/title/$uuid
           done
-          for mpid in $(echo "${{env.plusIDs}}")
+          for mpid in $(echo "${{ fromJson(needs.diff.outputs.plus) }}")
           do
             echo mangaplus.shueisha.co.jp/titles/$mpid
           done
