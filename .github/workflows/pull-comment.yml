@@ -61,12 +61,12 @@ jobs:
         run: |
           {
             echo 'dex_comm<<EOF'
-            ${{ needs.diff.outputs.dex }}
+            echo ${{ needs.diff.outputs.dex }}
             echo EOF
           } >> "$GITHUB_ENV"
           {
             echo 'dex_comm<<EOF'
-            ${{ needs.diff.outputs.plus }}
+            echo ${{ needs.diff.outputs.plus }}
             echo EOF
           } >> "$GITHUB_ENV"
           {
