@@ -38,7 +38,7 @@ jobs:
       - id: result
         run: |
           echo "dex_comm=$(cat mangadex.comm | xargs)" >> $GITHUB_OUTPUT
-          echo "plus_comm=$(cat mangaplus.comm | xargs')" >> $GITHUB_OUTPUT
+          echo "plus_comm=$(cat mangaplus.comm | xargs)" >> $GITHUB_OUTPUT
 
     outputs:
       dex: ${{ steps.result.outputs.dex_comm }}
