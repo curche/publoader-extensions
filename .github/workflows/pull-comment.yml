@@ -52,21 +52,18 @@ jobs:
       - name: Create file
         id: commentator
         run: |
-          echo ${{ needs.diff.outputs.dex }}
-          echo ${{ needs.diff.outputs.plus }}
           {
             echo 'PR_COMMENT_OUTPUT<<EOF'
-            curl https://example.com
+            for dex_uuid in ${{ needs.diff.outputs.dex }}
+            do
+              echo "https://mangadex.org/title/${dex_uuid}"
+            done
+            for mp_id in ${{ needs.diff.outputs.plus }}
+            do
+              echo "https://mangaplus.shueisha.co.jp/titles/${mp_id}"
+            done
             echo EOF
           } >> "$GITHUB_ENV"
-          for dex_uuid in ${{ needs.diff.outputs.dex }}
-          do
-            echo "https://mangadex.org/title/${dex_uuid}"
-          done
-          for mp_id in ${{ needs.diff.outputs.plus }}
-          do
-            echo "https://mangaplus.shueisha.co.jp/titles/${mp_id}"
-          done
       - name: PR comment with file
         uses: thollander/actions-comment-pull-request@v2
         with:
