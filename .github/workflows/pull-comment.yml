@@ -37,8 +37,8 @@ jobs:
           comm -13 current.mangaplus new.mangaplus | tee mangaplus.comm
       - id: result
         run: |
-          echo "dex_comm=$(cat mangadex.comm | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
-          echo "plus_comm=$(cat mangaplus.comm | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "dex_comm=$(cat mangadex.comm | xargs)" >> $GITHUB_OUTPUT
+          echo "plus_comm=$(cat mangaplus.comm | xargs')" >> $GITHUB_OUTPUT
 
     outputs:
       dex: ${{ steps.result.outputs.dex_comm }}
@@ -50,9 +50,23 @@ jobs:
     needs: [diff]
     steps:
       - name: Create file
+        id: commentator
         run: |
-          echo '${{ needs.diff.outputs.dex }}' | jq $(echo '.')
-          echo '${{ needs.diff.outputs.plus }}' | jq $(echo '.[]')
+          echo ${{ needs.diff.outputs.dex }}
+          echo ${{ needs.diff.outputs.plus }}
+          {
+            echo 'PR_COMMENT_OUTPUT<<EOF'
+            curl https://example.com
+            echo EOF
+          } >> "$GITHUB_ENV"
+          for dex_uuid in ${{ needs.diff.outputs.dex }}
+          do
+            echo "https://mangadex.org/title/${dex_uuid}"
+          done
+          for mp_id in ${{ needs.diff.outputs.plus }}
+          do
+            echo "https://mangaplus.shueisha.co.jp/titles/${mp_id}"
+          done
       - name: PR comment with file
         uses: thollander/actions-comment-pull-request@v2
         with:
