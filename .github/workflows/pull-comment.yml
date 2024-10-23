@@ -23,9 +23,7 @@ jobs:
           git -P show NEW_BRANCH:src/mangaplus/manga_id_map.json >new
           git -P show CURRENT_BRANCH:src/mangaplus/manga_id_map.json >current
       - name: jq to plus
-        run: |
-          cat new | jq -r .\[\].\[\] | sort -o new.mangaplus
-          cat current | jq -r .\[\].\[\] | sort -o current.mangaplus
+        run:  ; jq -r '.[].[]' new | sort -o new.mangaplus && cat current | jq -r '.[].[]' | sort -o current.mangaplus
       - name: jq to dex
         run: |
           what=". | keys[]"
